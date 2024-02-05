@@ -85,7 +85,9 @@ const PetsIndex = (props) => {
                 <Card.Header>{ pet.fullTitle }</Card.Header>
                 <Card.Body>
                     <Card.Text>
-                        { pet.name }
+                        <Link to={`/pets/${pet.id}`} className="btn btn-info">
+                            View { pet.name }
+                        </Link>
                     </Card.Text>
                     { pet.owner ?
                         <Card.Footer>Owner: { pet.owner.email }</Card.Footer>
