@@ -1,5 +1,5 @@
 // import React, { Component, Fragment } from 'react'
-import React, { useState, Fragment } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 
@@ -13,16 +13,30 @@ import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
 import PetShow from './components/pets/PetShow'
+import PetCreate from './components/pets/PetCreate'
 
 const App = () => {
 
 	const [user, setUser] = useState(null)
 	const [msgAlerts, setMsgAlerts] = useState([])
 
+	useEffect(() => {
+		// access local storage
+		const loggedInUser = localStorage.getItem('user')
+		if (loggedInUser) {
+			// we need to parse the JSON string
+			const foundUser = JSON.parse(loggedInUser)
+			// then set that saved user in state
+			setUser(foundUser)
+		}
+	}, [])
+
 	console.log('user in app', user)
 	console.log('message alerts', msgAlerts)
 	const clearUser = () => {
 		console.log('clear user ran')
+		// to clear the user staved in localStorage
+		localStorage.removeItem('user')
 		setUser(null)
 	}
 
@@ -68,6 +82,14 @@ const App = () => {
 					<RequireAuth user={user}>
 						<ChangePassword msgAlert={msgAlert} user={user} />
 					</RequireAuth>}
+				/>
+				<Route 
+					path='/create-pet'
+					element={
+						<RequireAuth user={user} >
+							<PetCreate user={user} msgAlert={msgAlert} />
+						</RequireAuth>
+					}
 				/>
 				<Route
 					path='/pets/:petId'

@@ -1,6 +1,4 @@
-import { useState, useEffect } from 'react'
 import PetsIndex from '../components/pets/PetsIndex'
-
 
 const Home = (props) => {
 	//console.log('props in home', props)

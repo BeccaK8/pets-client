@@ -22,7 +22,15 @@ const SignIn = (props) => {
         const credentials = {email, password}
 
 		signIn(credentials)
-			.then((res) => setUser(res.data.user))
+			.then((res) => {
+                setUser(res.data.user)
+
+                // to store a JSON string in localStorage, 
+                // which has a function called 'setItem'
+                const userJSON = JSON.stringify(res.data.user)
+                // localStorage.setItem takes two arguments -> name of data, value
+                localStorage.setItem('user', userJSON)
+            })
 			.then(() =>
 				msgAlert({
 					heading: 'Sign In Success',
