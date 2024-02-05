@@ -10,12 +10,16 @@
 // because our Pet Create and Pet Update will use the same form inputs
 
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { createPet } from '../../api/pet'
 
 import PetForm from '../shared/PetForm'
 
 const PetCreate = (props) => {
     // pull out our props
     const { user, msgAlert } = props
+    const navigate = useNavigate()
 
     // build our state object
     const [pet, setPet] = useState({
@@ -65,12 +69,32 @@ const PetCreate = (props) => {
         })
     }
 
+    const onSubmit = (evt) => {
+        evt.preventDefault()
+        createPet(user, pet)
+            .then(res => { navigate(`/pets/${res.data.pet.id}`)})
+            .then(() => {
+                msgAlert({
+                    heading: 'Oh Yeah!',
+                    message: 'We created the pet',
+                    variant: 'success'
+                })
+            })
+            .catch(err => {
+                msgAlert({
+                    heading: 'Oh no!',
+                    message: 'Something went wrong',
+                    variant: 'danger'
+                })
+            })
+    }
+
     console.log('the pet inside create: \n', pet)
     return (
         <PetForm 
             pet={pet}
             handleChange={onChange}
-            handleSubmit={() => {console.log('handle submit')}}
+            handleSubmit={onSubmit}
             heading="Add a New Pet"
         />
     )
