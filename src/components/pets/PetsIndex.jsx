@@ -40,7 +40,21 @@ const PetsIndex = (props) => {
 				console.log('use Effect hook ran')
 				setPets(res.data.pets)
 			})
-			.catch(error => console.error) 
+            .then(() => {
+                msgAlert({
+                    heading: 'Success!',
+                    message: 'Got all the pets!',
+                    variant: 'success'
+                })
+            })
+			.catch(error => {
+                msgAlert({
+                    heading: 'Oh no!',
+                    message: 'Something when wrong!',
+                    variant: 'danger'
+                })
+                setError(true)
+            }) 
 	}, [])
 
 	// WE NEVER EVER DO THIS
@@ -79,7 +93,6 @@ const PetsIndex = (props) => {
                         null
                     }
                 </Card.Body>
-
             </Card>
         ))
         return (
@@ -87,9 +100,7 @@ const PetsIndex = (props) => {
                 { petCards }
             </div>
         )
-
     }
-
 } 
 
 export default PetsIndex
