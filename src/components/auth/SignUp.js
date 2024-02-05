@@ -67,7 +67,7 @@ const SignUp = (props) => {
                             type='email'
                             name='email'
                             value={email}
-                            placeholder='Enter email'
+                            placeholder='Email'
                             onChange={e => setEmail(e.target.value)}
                         />
                     </Form.Group>
@@ -93,7 +93,7 @@ const SignUp = (props) => {
                             onChange={e => setPasswordConfirmation(e.target.value)}
                         />
                     </Form.Group>
-                    <Button variant='primary' type='submit'>
+                    <Button variant='primary' type='submit' className='m-2'>
                         Submit
                     </Button>
                 </Form>
