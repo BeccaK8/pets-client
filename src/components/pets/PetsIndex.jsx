@@ -7,6 +7,7 @@ import { getAllPets } from '../../api/pet'
 
 // used for rendering things
 import LoadingScreen from '../shared/LoadingScreen'
+import messages from '../shared/AutoDismissAlert/messages'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
@@ -37,20 +38,12 @@ const PetsIndex = (props) => {
 		getAllPets()
 			// .then(res => console.log('pets from axios: \n', res.data.pets))
 			.then(res => {
-				console.log('use Effect hook ran')
 				setPets(res.data.pets)
 			})
-            .then(() => {
-                msgAlert({
-                    heading: 'Success!',
-                    message: 'Got all the pets!',
-                    variant: 'success'
-                })
-            })
 			.catch(error => {
                 msgAlert({
                     heading: 'Oh no!',
-                    message: 'Something when wrong!',
+                    message: messages.generalError,
                     variant: 'danger'
                 })
                 setError(true)

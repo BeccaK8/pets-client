@@ -13,6 +13,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { createPet } from '../../api/pet'
+import messages from '../shared/AutoDismissAlert/messages'
 
 import PetForm from '../shared/PetForm'
 
@@ -77,14 +78,14 @@ const PetCreate = (props) => {
             .then(() => {
                 msgAlert({
                     heading: 'Oh Yeah!',
-                    message: 'We created the pet',
+                    message: messages.createPetSuccess,
                     variant: 'success'
                 })
             })
             .catch(err => {
                 msgAlert({
                     heading: 'Oh no!',
-                    message: 'Something went wrong',
+                    message: messages.generalError,
                     variant: 'danger'
                 })
             })

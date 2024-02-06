@@ -11,6 +11,7 @@ import { Card, Container, Button } from 'react-bootstrap'
 
 import { getOnePet, removePet } from '../../api/pet'
 
+import messages from '../shared/AutoDismissAlert/messages'
 import LoadingScreen from '../shared/LoadingScreen'
 
 const PetShow = (props) => {
@@ -25,17 +26,10 @@ const PetShow = (props) => {
     useEffect(() => {
         getOnePet(petId)
             .then(res => setPet(res.data.pet))
-            .then(() => {
-                msgAlert({
-                    heading: 'Oh Yeah!',
-                    message: 'We found the pet',
-                    variant: 'success'
-                })
-            })
             .catch(err => {
                 msgAlert({
                     heading: 'Oh no!',
-                    message: 'Something went wrong',
+                    message: messages.generalError,
                     variant: 'danger'
                 })
             })
@@ -50,7 +44,7 @@ const PetShow = (props) => {
             .then(() => {
                 msgAlert({
                     heading: 'Oh Yeah!',
-                    message: 'We set the pet free',
+                    message: messages.deletePetSuccess,
                     variant: 'success'
                 })
             })
@@ -60,7 +54,7 @@ const PetShow = (props) => {
             .catch(err => {
                 msgAlert({
                     heading: 'Oh no!',
-                    message: 'Something went wrong',
+                    message: messages.generalError,
                     variant: 'danger'
                 })
             })
