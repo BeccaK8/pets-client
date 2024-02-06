@@ -46,6 +46,29 @@ const EditPetModal = (props) => {
 
     const onSubmit = (evt) => {
         evt.preventDefault()
+
+        // make API call
+        updatePet(user, pet)
+            // close the modal
+            .then(() => handleClose())
+            // message user
+            .then(() => {
+                msgAlert({
+                    heading: 'Oh Yeah!',
+                    message: messages.updatePetSuccess,
+                    variant: 'success'
+                })
+            })
+            // trigger refresh
+            .then(() => triggerRefresh())
+            // send error message if applicable
+            .catch(err => {
+                msgAlert({
+                    heading: 'Oh No!',
+                    message: messages.generalError,
+                    variant: 'danger'
+                })
+            })
     }
 
     return (
