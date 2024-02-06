@@ -14,6 +14,14 @@ import { getOnePet, updatePet, removePet } from '../../api/pet'
 import messages from '../shared/AutoDismissAlert/messages'
 import LoadingScreen from '../shared/LoadingScreen'
 import EditPetModal from './EditPetModal'
+import ToyShow from '../toys/ToyShow'
+
+// set a style object for our toy card container
+const toyCardContainerLayout = {
+    display: 'flex',
+    justifyContent: 'center',
+    flexFlow: 'row wrap'
+}
 
 const PetShow = (props) => {
     const { petId } = useParams()
@@ -66,6 +74,24 @@ const PetShow = (props) => {
             })
     }
 
+    // Produce our Toy Cards
+    // This is going to map over the pet's toys array
+    // and produce cards for every toy
+    let toyCards
+    // if we have a pet and their toys array length > 0, make cards; otherwise, don't
+    if (pet) {
+        if (pet.toys.length > 0) {
+            toyCards = pet.toys.map(toy => (
+                <ToyShow 
+                    key={toy._id}
+                    toy={toy}    
+                />
+            ))
+        } else {
+            toyCards = <p>Pet has no toys, ain't that sad?</p>
+        }
+    }
+
     // if we don't have a pet, show LoadingScreen
     if (!pet) {
         return <LoadingScreen />
@@ -115,6 +141,9 @@ const PetShow = (props) => {
                         }
                     </Card.Footer>
                 </Card>
+            </Container>
+            <Container className="m-2" style={toyCardContainerLayout}>
+                { toyCards }
             </Container>
             <EditPetModal 
                 user={user}
