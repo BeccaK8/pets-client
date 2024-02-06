@@ -38,6 +38,7 @@ const PetCreate = (props) => {
         // if you pass an argument to the callback function of your state hook updater/setter
         // that argument is a placeholder for the most recent state
         // this will maintain our state, anything you have typed before the  next letter
+        // prevPet is a placeholder (parameter) for the LAST state of pet
         setPet( prevPet => {
             const updatedName = evt.target.name
             let updatedValue = evt.target.value
