@@ -9,16 +9,22 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Card, Container, Button } from 'react-bootstrap'
 
-import { getOnePet, removePet } from '../../api/pet'
+import { getOnePet, updatePet, removePet } from '../../api/pet'
 
 import messages from '../shared/AutoDismissAlert/messages'
 import LoadingScreen from '../shared/LoadingScreen'
+import EditPetModal from './EditPetModal'
 
 const PetShow = (props) => {
     const { petId } = useParams()
     const { user, msgAlert } = props
 
     const [pet, setPet] = useState(null)
+    // this determines if the editPetModel is open or not
+    const [editModalShow, setEditModalShow] = useState(false)
+
+    // this is a boolean that we can switch between to trigger a page rerender
+    const [updated, setUpdated] = useState(false)
 
     // this gives us a function we can use to navigate via react-router
     const navigate = useNavigate()
@@ -33,7 +39,7 @@ const PetShow = (props) => {
                     variant: 'danger'
                 })
             })
-    }, [])
+    }, [updated])
 
     // this is an api call function, so we'll need to handle promise chain
     // this means sending appropriate messages as well as navigating upon success
@@ -85,7 +91,11 @@ const PetShow = (props) => {
                             pet.owner && user && pet.owner._id === user._id
                             ?
                             <>
-                                <Button>
+                                <Button
+                                    className="m-2"
+                                    variant="warning"
+                                    onClick={() => setEditModalShow(true)}
+                                >
                                     Edit Pet
                                 </Button>
                                 <Button 
@@ -106,6 +116,15 @@ const PetShow = (props) => {
                     </Card.Footer>
                 </Card>
             </Container>
+            <EditPetModal 
+                user={user}
+                show={editModalShow}
+                updatePet={updatePet}
+                msgAlert={msgAlert}
+                handleClose={() => setEditModalShow(false)}
+                pet={pet}
+                triggerRefresh={() => setUpdated(prev => !prev)}
+            />
         </>
     )
 }
