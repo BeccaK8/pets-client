@@ -7,6 +7,8 @@ import { Modal } from "react-bootstrap"
 
 import ToyForm from "../shared/ToyForm"
 import messages from "../shared/AutoDismissAlert/messages"
+import { createToy } from '../../api/toy'
+
 // api call needed!!
 
 // we'll also need the same props we're passing to ToyForm if they come from the parent
@@ -18,12 +20,54 @@ const NewToyModal = (props) => {
     // we'll build this object out, using our handleChange function
     const [toy, setToy] = useState([])
 
-    const onChange = () => {
-        console.log('on change')
+
+    const onChange = (evt) => {
+        evt.persist()
+        setToy( prevToy => {
+            const updatedName = evt.target.name
+            let updatedValue = evt.target.value
+
+            if (updatedName === 'isSqueaky' && evt.target.checked) {
+                updatedValue = true
+            } else if (updatedName === 'isSqueaky' && !evt.target.checked) {
+                updatedValue = false
+            }
+
+            const updatedToy = { [updatedName] : updatedValue }
+
+            return {
+                ...prevToy, ...updatedToy
+            }
+        })
     }
 
-    const onSubmit = () => {
-        console.log('on submit')
+    const onSubmit = (evt) => {
+        evt.preventDefault()
+
+        // make api call
+        createToy(pet, toy)
+            // close the modal
+            .then(() => handleClose())
+            // notify user of success
+            .then(() => {
+                msgAlert({
+                    heading: 'Oh Yeah!',
+                    message: messages.createToySuccess,
+                    variant: 'success'
+                })
+            })
+            // refresh the parent page (component)
+            .then(() => triggerRefresh())
+            // set toy back to initial state to clear out form
+            .then(() => setToy({}))
+            // catch any errors
+            .catch(err => {
+                msgAlert({
+                    heading: 'Oh no!',
+                    message: messages.generalError,
+                    variant: 'danger'
+                })
+            })
     }
 
     return (
