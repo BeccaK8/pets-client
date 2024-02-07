@@ -2,13 +2,18 @@
 // the pet's toys array will be mapped, producing one of these componnets
 // for every toy in the array
 
+import { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
-import { updateToy, removeToy } from '../../api/toy'
+import { removeToy } from '../../api/toy'
 import messages from '../shared/AutoDismissAlert/messages'
+import EditToyModal from './EditToyModal'
 
 const ToyShow = (props) => {
     // for teh first iteration of this component, we'll only need one prop - the toy
     const { user, pet, toy, msgAlert, triggerRefresh } = props
+
+    // hook used to display/hide modal
+    const [editModalShow, setEditModalShow] = useState(false)
 
     const setBgCondition = (cond) => {
         // a toy can be either new, used, or disgusting
@@ -63,8 +68,8 @@ const ToyShow = (props) => {
                             <Button
                                 className='m-2'
                                 variant='warning'
-                                onClick={() => console.log('update button clicked')}
-                                >
+                                onClick={() => setEditModalShow(true)}
+                            >
                                 Update Toy
                             </Button>
                             <Button
@@ -72,7 +77,7 @@ const ToyShow = (props) => {
                                 variant='danger'
                                 onClick={() => destroyToy()}
                             >
-                                Remove Toy
+                                Delete Toy
                             </Button>
                         </>
                         :
@@ -80,6 +85,15 @@ const ToyShow = (props) => {
                     }
                 </Card.Footer>
             </Card>
+            <EditToyModal
+                user={user}
+                pet={pet}
+                toy={toy}
+                show={editModalShow}
+                handleClose={() => setEditModalShow(false)}
+                msgAlert={msgAlert}
+                triggerRefresh={triggerRefresh}
+            />
         </>
     )
 }
