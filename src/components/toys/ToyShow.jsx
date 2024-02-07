@@ -3,10 +3,12 @@
 // for every toy in the array
 
 import { Card, Button } from 'react-bootstrap'
+import { updateToy, removeToy } from '../../api/toy'
+import messages from '../shared/AutoDismissAlert/messages'
 
 const ToyShow = (props) => {
     // for teh first iteration of this component, we'll only need one prop - the toy
-    const { toy } = props
+    const { user, pet, toy, msgAlert, triggerRefresh } = props
 
     const setBgCondition = (cond) => {
         // a toy can be either new, used, or disgusting
@@ -19,6 +21,30 @@ const ToyShow = (props) => {
         }
     }
 
+    // the api calling function that destroys a toy
+    const destroyToy = () => {
+        // remove the toy
+        removeToy(user, pet._id, toy._id)
+            // notify user of success
+            .then(() => {
+                msgAlert({
+                    heading: 'Oh Yeah!',
+                    message: messages.deleteToySuccess,
+                    variant: 'success'
+                })
+            })
+            // refresh the parent page (component)
+            .then(() => triggerRefresh())
+            // catch any errors
+            .catch(err => {
+                msgAlert({
+                    heading: 'Oh no!',
+                    message: messages.generalError,
+                    variant: 'danger'
+                })
+            })
+    }
+
     return (
         <>
             <Card className='m-2' style={setBgCondition(toy.condition)}>
@@ -29,7 +55,29 @@ const ToyShow = (props) => {
                     <small>{toy.isSqueaky ? 'squeak squeak' : 'stoic silence'}</small>
                 </Card.Body>
                 <Card.Footer>
-                    <small>Condition: {toy.condition}</small>
+                    <small>Condition: {toy.condition}</small><br />
+                    {
+                        user && pet.owner && user._id === pet.owner._id 
+                        ?
+                        <>
+                            <Button
+                                className='m-2'
+                                variant='warning'
+                                onClick={() => console.log('update button clicked')}
+                                >
+                                Update Toy
+                            </Button>
+                            <Button
+                                className='m-2'
+                                variant='danger'
+                                onClick={() => destroyToy()}
+                            >
+                                Remove Toy
+                            </Button>
+                        </>
+                        :
+                        null
+                    }
                 </Card.Footer>
             </Card>
         </>

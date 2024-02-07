@@ -86,7 +86,11 @@ const PetShow = (props) => {
             toyCards = pet.toys.map(toy => (
                 <ToyShow 
                     key={toy._id}
-                    toy={toy}    
+                    toy={toy} 
+                    pet={pet}
+                    user={user}   
+                    msgAlert={msgAlert}
+                    triggerRefresh={() => setUpdated(prev => !prev)}
                 />
             ))
         } else {
