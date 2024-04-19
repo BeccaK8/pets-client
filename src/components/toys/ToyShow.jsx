@@ -85,15 +85,7 @@ const ToyShow = (props) => {
                     }
                 </Card.Footer>
             </Card>
-            <EditToyModal
-                user={user}
-                pet={pet}
-                toy={toy}
-                show={editModalShow}
-                handleClose={() => setEditModalShow(false)}
-                msgAlert={msgAlert}
-                triggerRefresh={triggerRefresh}
-            />
+Compl
         </>
     )
 }
